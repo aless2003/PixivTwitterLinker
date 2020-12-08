@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainPage {
+public class PixivTwitterLinker {
 
     public static final int WAIT_TIME = 5000;
 
@@ -33,7 +33,9 @@ public class MainPage {
         File exportFile = new File("TwitterAccounts_Creators.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(exportFile))) {
             if (!exportFile.exists()) {
-                exportFile.createNewFile();
+                if (!exportFile.createNewFile()) {
+                    System.out.println("Error! File can't be created!");
+                }
             }
             writer.write(getTwitterProfile(link));
         } catch (IOException e) {
