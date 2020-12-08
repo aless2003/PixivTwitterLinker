@@ -13,62 +13,88 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainPage {
-    public static void main(String[] args) throws InterruptedException {
-        writeNewInfo(83955775);
+
+    public static final int WAIT_TIME = 5000;
+
+    //as example use this or replace with any picture ID
+    public static void main(String[] args) {
+        writeNewInfo(86131525);
     }
 
     public static void writeNewInfo(int pictureId) {
         getNewInfo(pictureId);
     }
 
+    //Writes the Info to the File specified.
+    //IMPORTANT: It will write Error if there was no Twitter Account found on the Artists page.
     public static void getNewInfo(int pictureId) {
+        //constructs Link via pictureID
         String link = String.format("https://www.pixiv.net/en/artworks/%d", pictureId);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TwitterAccounts_Creators.txt"))) {
-            if (!new File("TwitterAccounts_Creators.txt").exists()) {
-                new File("TwitterAccounts_Creators.txt").createNewFile();
+        File exportFile = new File("TwitterAccounts_Creators.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(exportFile))) {
+            if (!exportFile.exists()) {
+                exportFile.createNewFile();
             }
             writer.write(getTwitterProfile(link));
-        } catch (InterruptedException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static String getTwitterProfile(String link) throws InterruptedException {
+    //returns the Artist ID and the Twitter Profile name.
+    private static String getTwitterProfile(String link) {
+        //replace the paths with your own Paths to the chromedriver.
+
         if (isWindows()) {
             System.setProperty("webdriver.chrome.driver", "./chromedriver.exe");
         } else {
             System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver");
         }
         WebDriver webDriver = new ChromeDriver();
-        webDriver.get(link);
-        webDriver.findElement(By.xpath("//a[contains(@href,'/en/users/')]")).click();
-        Thread.sleep(5000);
-        String current = webDriver.getCurrentUrl();
-        Matcher matcher = Pattern.compile("https://www.pixiv.net/en/users/(\\d+)").matcher(current);
-        String Id = "";
-        if (matcher.matches()) {
-            Id = matcher.group(1);
+        String outString = "";
+        try {
+            webDriver.get(link);
+
+            webDriver.findElement(By.xpath("//a[contains(@href,'/en/users/')]")).click();
+            Thread.sleep(WAIT_TIME);
+
+            String current = webDriver.getCurrentUrl();
+            Matcher matcher = Pattern.compile("https://www.pixiv.net/en/users/(\\d+)").matcher(current);
+            String Id = "";
+            if (matcher.matches()) {
+                Id = matcher.group(1);
+            }
+
+            webDriver.findElement(By.xpath("//a[contains(@href,'/jump.php?url=https%3A%2F%2Ftwitter.com%2F')]")).click();
+
+            Thread.sleep(WAIT_TIME);
+
+            System.out.println(webDriver.getCurrentUrl());
+            Set<String> windows = webDriver.getWindowHandles();
+
+            webDriver.switchTo().window((String) windows.toArray()[1]);
+            webDriver.findElement(By.xpath("//a[contains(@href,'https://twitter.com/')]")).click();
+
+            Thread.sleep(WAIT_TIME);
+            Pattern pattern = Pattern.compile("https://twitter.com/(.*)");
+            matcher = pattern.matcher(webDriver.getCurrentUrl());
+
+            if (matcher.matches()) {
+                outString = String.format("%s\n@%s", Id, matcher.group(1));
+            }
+        } catch (Exception e) {
+            outString = "Error";
         }
-        webDriver.findElement(By.xpath("//a[contains(@href,'/jump.php?url=https%3A%2F%2Ftwitter.com%2F')]")).click();
-        Thread.sleep(5000);
-        System.out.println(webDriver.getCurrentUrl());
-        Set<String> windows = webDriver.getWindowHandles();
-        webDriver.switchTo().window((String) windows.toArray()[1]);
-        webDriver.findElement(By.xpath("//a[contains(@href,'https://twitter.com/')]")).click();
-        Thread.sleep(5000);
-        Pattern pattern = Pattern.compile("https://twitter.com/(.*)");
-        matcher = pattern.matcher(webDriver.getCurrentUrl());
-        if (matcher.matches()) {
-            webDriver.quit();
-            return String.format("%s\n@%s", Id, matcher.group(1));
-        }
-        return "Error";
+        webDriver.quit();
+
+
+        return outString;
     }
 
+    //checks if the OS is Windows 10
     private static boolean isWindows() {
         return System.getProperty("os.name").equalsIgnoreCase("windows 10");
     }
-
 
 
 }
