@@ -5,9 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.Diamond</groupId>
     <artifactId>TwitterToPixivLinker</artifactId>
-    <version>2.5</version>
+    <version>2.6</version>
     <name>TwitterToPixivLinker</name>
-
+    <distributionManagement>
+        <repository>
+            <id>GitHub-Repo-TwitterPixivLinker</id>
+            <url>https://github.com/aless2003/PixivTwitterLinker</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
