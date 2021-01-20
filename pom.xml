@@ -9,8 +9,9 @@
     <name>TwitterToPixivLinker</name>
     <distributionManagement>
         <repository>
-            <id>GitHub-Repo-TwitterPixivLinker</id>
-            <url>https://github.com/aless2003/PixivTwitterLinker</url>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Package</name>
+            <url>https://maven.pkg.github.com/aless2003/PixivTwitterLinker</url>
         </repository>
     </distributionManagement>
     <properties>
