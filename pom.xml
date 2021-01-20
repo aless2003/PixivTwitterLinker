@@ -53,7 +53,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.Diamond.TwitterToPixivLinker.MainPage</mainClass>
+                            <mainClass>com.Diamond.TwitterToPixivLinker.PixivTwitterLinker</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
