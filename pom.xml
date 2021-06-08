@@ -20,7 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <junit.version>5.7.0</junit.version>
         <aspectj.version>1.9.6</aspectj.version>
-        <allure.version>2.13.6</allure.version>
+        <allure.version>2.13.10</allure.version>
     </properties>
 
     <dependencies>
