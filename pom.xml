@@ -20,7 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <junit.version>5.7.0</junit.version>
         <aspectj.version>1.9.6</aspectj.version>
-        <allure.version>2.13.10</allure.version>
+        <allure.version>2.14.0</allure.version>
     </properties>
 
     <dependencies>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>25.1-jre</version>
+            <version>30.0-jre</version>
         </dependency>
              
         <dependency>
